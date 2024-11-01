@@ -9,6 +9,9 @@ import UIKit
 
 class CalcController: UIViewController {
     
+    //MARK: - Variables
+    let viewModel: CalcControllerViewModel
+    
     //MARK: - UI Components
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -22,6 +25,16 @@ class CalcController: UIViewController {
     }()
 
     //MARK: - Lifecycle
+    
+    init(_ viewModel: CalcControllerViewModel = CalcControllerViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemCyan
@@ -53,14 +66,18 @@ class CalcController: UIViewController {
 
 extension CalcController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return self.viewModel.calcButtonCells.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ButtonCell.identifier, for: indexPath) as? ButtonCell else {
             fatalError("Fatal Error Message")
         }
-        cell.backgroundColor = .systemOrange
+        
+        let calcButton = self.viewModel.calcButtonCells[indexPath.row]
+        
+        cell.configure(with: calcButton)
+        
         return cell
     }
     
@@ -69,23 +86,4 @@ extension CalcController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
 }
-
-
-//extension CalcController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 15
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ButtonCell.identifier, for: indexPath) as? ButtonCell else {
-//            fatalError("Failed")
-//        }
-//        cell.backgroundColor = .systemPink
-//        return cell
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: view.frame.size.width/5, height: view.frame.size.width/5)
-//    }
-//}
 
