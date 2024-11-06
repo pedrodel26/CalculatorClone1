@@ -82,8 +82,30 @@ extension CalcController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width/5, height: view.frame.size.width/5)
+        
+        let calcButton = self.viewModel.calcButtonCells[indexPath.row]
+        
+        switch calcButton {
+        case let .number(int) where int == 0:
+            return CGSize(
+                width: (view.frame.self.width/5)*2 + ((view.frame.width/5)/3),
+                height: view.frame.size.width/5
+            )
+        default:
+            return CGSize(
+                width: view.frame.size.width/5,
+                height: view.frame.size.width/5
+            )
+        }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return (self.view.frame.width/5)/3
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let buttonCell = self.viewModel.calcButtonCells[indexPath.row]
+        print(buttonCell.title)
+    }
 }
 
